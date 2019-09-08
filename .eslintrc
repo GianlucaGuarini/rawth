@@ -8,3 +8,4 @@ parserOptions:
 
 rules:
   fp/no-rest-parameters: 0
+  fp/no-mutating-methods: 0

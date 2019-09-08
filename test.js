@@ -1,4 +1,4 @@
-import {
+import route, {
   compile,
   defaults,
   match,
@@ -43,6 +43,8 @@ describe('rawth', function() {
     const url = parse('http://example.com/foo/bar', path)
 
     expect(url.pathname).to.be.equal('/foo/bar')
+    expect(url.params[0]).to.be.equal('foo')
+    expect(url.params[1]).to.be.equal('bar')
   })
 
   it('the match method will return true only for the routes matching the test regex', () => {
@@ -55,5 +57,20 @@ describe('rawth', function() {
 
   it('the streaming router gets exported', () => {
     expect(router).to.be.ok
+  })
+
+  it('a subroute stream gets properly created', done => {
+    const fooBarStream = route(':foo/:bar')
+
+    fooBarStream.on.value(url => {
+      expect(url.params[0]).to.be.equal('foo')
+      expect(url.params[1]).to.be.equal('bar')
+
+      fooBarStream.end()
+
+      done()
+    })
+
+    router.push('foo/bar')
   })
 })

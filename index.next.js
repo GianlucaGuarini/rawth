@@ -1,11 +1,32 @@
 import erre from 'erre'
+import fromDOM from 'erre.fromdom'
 import pathToRegexp from 'path-to-regexp'
 
-// create the streaming router
-export const router = erre()
+// dom events
+const POPSTATE = 'popstate'
+const HASHCHANGE = 'hashchange'
+
+/**
+ * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
+ * @param   {Stream} dispatcherStream - main stream dispatching events
+ * @param   {Stream} receiverStream - sub stream receiving events from the dispatcher
+ * @returns {Stream} receiverStream
+ */
+function combine(dispatcherStream, receiverStream) {
+  dispatcherStream.on.value(receiverStream.push)
+
+  receiverStream.on.end(() => {
+    dispatcherStream.off.value(receiverStream.push)
+  })
+
+  return receiverStream
+}
 
 // check whether the window object is defined
 export const hasWindow = () => typeof window !== 'undefined'
+
+// create the streaming router
+export const router = hasWindow() ? fromDOM(window, `${POPSTATE} ${HASHCHANGE}`) : erre()
 
 // url constructor
 export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
@@ -23,6 +44,13 @@ export const defaults = {
   endsWith: undefined,
   whitelist: undefined
 }
+
+/**
+ * Replace the base path from a path
+ * @param   {string} path [description]
+ * @returns {string} path cleaned up without the base
+ */
+export const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
 
 /**
  * Merge the user options with the defaults
@@ -55,14 +83,15 @@ export const toPath = (path, params, options) => compile(path, options)(params)
  */
 export const parse = (path, pathRegExp, options) => {
   const {base} = mergeOptions(options)
-  const [, ...matches] = pathRegExp.exec(path)
+  const [, ...params] = pathRegExp.exec(path)
   const url = parseURL(path, base)
 
-  // extend the url object adding the matches
-  url.matches = matches
+  // extend the url object adding the matched params
+  url.params = params
 
   return url
 }
+
 
 /**
  * Return true if a path will be matched
@@ -71,3 +100,26 @@ export const parse = (path, pathRegExp, options) => {
  * @returns {boolean} true if the path matches the regexp
  */
 export const match = (path, pathRegExp) => pathRegExp.test(path)
+
+/**
+ * Create a fork of the main router stream
+ * @param   {string} path - route to match
+ * @param   {Object} options - pathToRegexp options object
+ * @returns {Stream} route stream
+ */
+export default function createRoute(path, options) {
+  const pathRegExp = pathToRegexp(path)
+  const matchOrSkip = path => {
+    if (match(path, pathRegExp)) {
+      return path
+    }
+
+    return erre.cancel()
+  }
+
+  return combine(router, erre(
+    replaceBase,
+    matchOrSkip,
+    path => parse(path, pathRegExp, options)
+  ))
+}

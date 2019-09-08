@@ -6,8 +6,8 @@
 [![NPM downloads][npm-downloads-image]][npm-url]
 [![Code Quality][codeclimate-image]][codeclimate-url]
 [![Coverage Status][coverage-image]][coverage-url]
-[![MIT License][license-image]][license-url]
 ![rawth size][lib-size]
+[![MIT License][license-image]][license-url]
 
 # :construction: WIP Come back soon :construction:
 
