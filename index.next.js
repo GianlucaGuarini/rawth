@@ -5,6 +5,7 @@ import pathToRegexp from 'path-to-regexp'
 const hasWindow = typeof window !== 'undefined'
 
 // the url parsing function depends on the platform, on node we rely on the 'url' module
+/* istanbul ignore next */
 const parseURL = (...args) => hasWindow ? new URL(...args) : require('url').parse(...args)
 
 /**

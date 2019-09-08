@@ -90,4 +90,14 @@ describe('rawth', function() {
 
     router.push('foo/bar')
   })
+
+  it('subroute streams don\'t get called if the route doesn\'t match', () => {
+    const fooBarStream = route(':foo/:bar')
+
+    fooBarStream.on.value(() => {
+      expect.fail('you should never get here')
+    })
+
+    router.push('foo')
+  })
 })
