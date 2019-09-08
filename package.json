@@ -1,0 +1,51 @@
+{
+  "name": "rawth",
+  "version": "0.0.0",
+  "description": "Streams based isomorphic router",
+  "main": "rawth.js",
+  "jsnext:main": "index.next.js",
+  "module": "index.next.js",
+  "scripts": {
+    "prepare": "npm run build && npm test",
+    "lint": "eslint index.next.js test.js rollup.config.js",
+    "build": "rollup -c",
+    "cov-submit": "RAWTH_COV=1 cat ./coverage/report-lcov/lcov.info | coveralls",
+    "cov-report": "nyc report --reporter=lcov --reporter=text",
+    "doc": "documentation readme index.next.js -s API",
+    "pretest": "npm run build",
+    "test": "npm run lint && nyc mocha -r esm test.js"
+  },
+  "files": [
+    "index.next.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GianlucaGuarini/rawth.git"
+  },
+  "keywords": [
+    "es6",
+    "es2015"
+  ],
+  "author": "Gianluca Guarini <gianluca.guarini@gmail.com> (http://gianlucaguarini.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GianlucaGuarini/rawth/issues"
+  },
+  "homepage": "https://github.com/GianlucaGuarini/rawth#readme",
+  "devDependencies": {
+    "@gianlucaguarini/eslint-config": "^2.0.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.3.0",
+    "esm": "^3.2.25",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rollup": "^1.20.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "erre": "^2.2.0",
+    "path-to-regexp": "^3.1.0"
+  }
+}
