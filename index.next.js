@@ -1,5 +1,8 @@
-//import erre from 'erre'
+import erre from 'erre'
 import pathToRegexp from 'path-to-regexp'
+
+// create the streaming router
+export const router = erre()
 
 // check whether the window object is defined
 export const hasWindow = () => typeof window !== 'undefined'

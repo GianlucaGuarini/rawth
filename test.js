@@ -4,6 +4,7 @@ import {
   match,
   mergeOptions,
   parse,
+  router,
   toPath,
   toRegexp
 } from './index.next'
@@ -50,5 +51,9 @@ describe('rawth', function() {
     expect(match('http://example.com/foo/bar', path)).to.be.ok
     expect(match('http://example.com/foo/bar/', path)).to.be.ok
     expect(match('http://example.com/foo', path)).to.be.not.ok
+  })
+
+  it('the streaming router gets exported', () => {
+    expect(router).to.be.ok
   })
 })
