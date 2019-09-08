@@ -1,11 +1,5 @@
 import erre from 'erre'
-import fromDOM from 'erre.fromdom'
 import pathToRegexp from 'path-to-regexp'
-
-// dom events
-const POPSTATE = 'popstate'
-const HASHCHANGE = 'hashchange'
-const HASH = '#'
 
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
@@ -24,28 +18,11 @@ function combine(dispatcherStream, receiverStream) {
   return receiverStream
 }
 
-// just return the current window location
-const readWindowLocation = () => window.location
-
-export const generateBasePath = () => {
-  if (hasWindow()) {
-    const loc = window.location
-
-    return `${loc.protocol}//${loc.host}`
-  }
-
-  return ''
-}
-
 // check whether the window object is defined
 export const hasWindow = () => typeof window !== 'undefined'
 
 // create the streaming router
-export const router = (
-  hasWindow() ?
-    fromDOM(window, `${POPSTATE} ${HASHCHANGE}`).connect(readWindowLocation) :
-    erre()
-).connect(String) // cast the values of this stream always to string
+export const router = erre(String) // cast the values of this stream always to string
 
 // url constructor
 export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
@@ -53,7 +30,7 @@ export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('u
 // general configuration object
 export const defaults = {
   // custom option
-  base: generateBasePath(),
+  base: '',
   // pathToRegexp options
   sensitive: false,
   strict: false,
@@ -70,13 +47,6 @@ export const defaults = {
  * @returns {string} path cleaned up without the base
  */
 export const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
-
-/**
- * Replace the hash char at beginning of a route
- * @param   {string} path - router path string
- * @returns {string} path cleaned up without the base
- */
-export const replaceHash = path => path.startsWith(HASH) ? path.substring(1) : path
 
 /**
  * Merge the user options with the defaults
@@ -142,7 +112,6 @@ export default function createRoute(path, options) {
 
   return combine(router, erre(
     replaceBase,
-    replaceHash,
     matchOrSkip,
     parseRoute
   ))

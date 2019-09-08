@@ -52,7 +52,6 @@
   },
   "dependencies": {
     "erre": "^2.2.0",
-    "erre.fromdom": "^1.0.2",
     "path-to-regexp": "^3.1.0"
   }
 }

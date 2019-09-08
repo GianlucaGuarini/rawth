@@ -26,13 +26,28 @@ route('/users/:user').on.value(({params}) => {
 router.push('/users/gianluca')
 ```
 
+### Unsubscribe streams
+
+If you want to unsubscribe to a specific route you need just to end the stream
+
+```js
+const usersRouteStream = route('/users/:user')
+
+usersRouteStream.on.value(({params}) => {
+  //
+})
+
+// end the stream
+usersRouteStream.end()
+```
+
 [travis-image]:https://img.shields.io/travis/GianlucaGuarini/rawth.svg?style=flat-square
 [travis-url]:https://travis-ci.org/GianlucaGuarini/rawth
 
 [license-image]:http://img.shields.io/badge/license-MIT-000000.svg?style=flat-square
 [license-url]:LICENSE
 
-[lib-size]: https://img.badgesize.io/https://unpkg.com/rawth/rawth.min.js?compression=gzip
+[lib-size]:https://img.badgesize.io/https://unpkg.com/rawth/rawth.min.js?compression=gzip
 
 [npm-version-image]:http://img.shields.io/npm/v/rawth.svg?style=flat-square
 [npm-downloads-image]:http://img.shields.io/npm/dm/rawth.svg?style=flat-square

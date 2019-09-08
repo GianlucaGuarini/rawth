@@ -59,13 +59,13 @@ describe('rawth', function() {
     expect(router).to.be.ok
   })
 
-  it('the hash routes will be cleaned up', (done) => {
-    const fooBarStream = route(':foo/:bar')
+  it('the hash routes can be matched as well', (done) => {
+    const fooBarStream = route('#:foo/:bar')
 
-    fooBarStream.on.value(({params, pathname}) => {
+    fooBarStream.on.value(({params, hash}) => {
       expect(params[0]).to.be.equal('foo')
       expect(params[1]).to.be.equal('bar')
-      expect(pathname).to.be.equal('foo/bar')
+      expect(hash).to.be.equal('#foo/bar')
 
       fooBarStream.end()
 
