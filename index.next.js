@@ -1,14 +1,26 @@
 import erre from 'erre'
 import pathToRegexp from 'path-to-regexp'
 
+// check whether the window object is defined
+const hasWindow = () => typeof window !== 'undefined'
+
+// the url parsing function depends on the platform, on node we rely on the 'url' module
+const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
+
+/**
+ * Replace the base path from a path
+ * @param   {string} path - router path string
+ * @returns {string} path cleaned up without the base
+ */
+const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
+
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
- * @private
  * @param   {Stream} dispatcherStream - main stream dispatching events
  * @param   {Stream} receiverStream - sub stream receiving events from the dispatcher
  * @returns {Stream} receiverStream
  */
-function combine(dispatcherStream, receiverStream) {
+const joinStreams = (dispatcherStream, receiverStream) => {
   dispatcherStream.on.value(receiverStream.push)
 
   receiverStream.on.end(() => {
@@ -18,16 +30,10 @@ function combine(dispatcherStream, receiverStream) {
   return receiverStream
 }
 
-// check whether the window object is defined
-export const hasWindow = () => typeof window !== 'undefined'
-
 // create the streaming router
 export const router = erre(String) // cast the values of this stream always to string
 
-// url constructor
-export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
-
-// general configuration object
+/* @type {object} general configuration object */
 export const defaults = {
   // custom option
   base: '',
@@ -40,13 +46,6 @@ export const defaults = {
   endsWith: undefined,
   whitelist: undefined
 }
-
-/**
- * Replace the base path from a path
- * @param   {string} path - router path string
- * @returns {string} path cleaned up without the base
- */
-export const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
 
 /**
  * Merge the user options with the defaults
@@ -100,17 +99,14 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  * Create a fork of the main router stream
  * @param   {string} path - route to match
  * @param   {Object} options - pathToRegexp options object
- * @returns {Stream} route stream
+ * @returns {Stream} new route stream
  */
 export default function createRoute(path, options) {
   const pathRegExp = pathToRegexp(path)
-  const matchOrSkip = path => {
-    if (match(path, pathRegExp)) return path
-    return erre.cancel()
-  }
+  const matchOrSkip = path => (match(path, pathRegExp)) ? path : erre.cancel()
   const parseRoute = path => parse(path, pathRegExp, options)
 
-  return combine(router, erre(
+  return joinStreams(router, erre(
     replaceBase,
     matchOrSkip,
     parseRoute

@@ -26,19 +26,47 @@ route('/users/:user').on.value(({params}) => {
 router.push('/users/gianluca')
 ```
 
+The argument passed to the subscribed functions is an [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL) object having `params` as additional property. The `params` array will contain all the matched [route parameters](https://github.com/pillarjs/path-to-regexp#parameters)
+
+```js
+import route, { router } from 'rawth'
+
+route('/:group/:user').on.value(({params}) => {
+  const [group, user] = params
+
+  console.log(`Hello dear ${user}, you are part of the ${group} group`)
+})
+
+// you can dispatch router events at any time
+router.push('/friends/gianluca')
+```
+
 ### Unsubscribe streams
 
 If you want to unsubscribe to a specific route you need just to end the stream
 
 ```js
+import route from 'rawth'
+
 const usersRouteStream = route('/users/:user')
 
-usersRouteStream.on.value(({params}) => {
-  //
-})
+// subscribe to the stream as many times as you want
+usersRouteStream.on.value(({params}) => { /* */ })
+usersRouteStream.on.value(({params}) => { /* */ })
+usersRouteStream.on.value(({params}) => { /* */ })
 
 // end the stream
 usersRouteStream.end()
+```
+
+### Set the base path
+
+You can set the base path in order to simplify the creation of the subscription functions
+
+```js
+import { defaults } from 'rawth'
+
+defaults.base = 'http://localhost:8000'
 ```
 
 [travis-image]:https://img.shields.io/travis/GianlucaGuarini/rawth.svg?style=flat-square

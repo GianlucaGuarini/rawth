@@ -39,10 +39,11 @@ describe('rawth', function() {
   })
 
   it('the parse method will return a proper URL object', () => {
-    const path = toRegexp('http://example.com/:foo/:bar')
-    const url = parse('http://example.com/foo/bar', path)
+    const path = toRegexp(':foo/:bar')
+    const url = parse('foo/bar', path)
 
-    expect(url.pathname).to.be.equal('/foo/bar')
+    expect(url.pathname).to.be.equal('foo/bar')
+    expect(url.hostname).to.be.equal(null)
     expect(url.params[0]).to.be.equal('foo')
     expect(url.params[1]).to.be.equal('bar')
   })
