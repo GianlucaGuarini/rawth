@@ -1,6 +1,12 @@
-# rawth
+<p align="righ">
+  <img src="https://cdn.rawgit.com/GianlucaGuarini/rawth/master/rawth-logo.png" alt="rawth"/>
+</p>
 
-Pure functional isomorphic router based on streams. It works consistently on modern browsers and on node.
+
+##### Pure functional isomorphic router based on streams. It works consistently on modern browsers and on node.
+
+---
+
 
 [![Build Status][travis-image]][travis-url]
 
