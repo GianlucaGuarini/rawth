@@ -1,5 +1,7 @@
 # rawth
 
+Pure functional isomorphic router based on streams
+
 [![Build Status][travis-image]][travis-url]
 
 [![NPM version][npm-version-image]][npm-url]
@@ -14,8 +16,21 @@
 ## Usage
 
 ```js
-import rawth from 'rawth'
+import route, { router } from 'rawth'
 
+const userStreamRoute = route('/users/:user')
+
+userStreamRoute.on.value(({params}) => {
+  const [user] = params
+
+  console.log(`Hello dear ${user}`)
+})
+
+// you can dispatch router events in node
+router.push('/users/gianluca')
+
+// or just use the browser history.pushState event
+history.pushState({ page: 1 }, 'Users Page', '/users/gianluca')
 ```
 
 [travis-image]:https://img.shields.io/travis/GianlucaGuarini/rawth.svg?style=flat-square

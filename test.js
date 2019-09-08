@@ -59,12 +59,28 @@ describe('rawth', function() {
     expect(router).to.be.ok
   })
 
+  it('the hash routes will be cleaned up', (done) => {
+    const fooBarStream = route(':foo/:bar')
+
+    fooBarStream.on.value(({params, pathname}) => {
+      expect(params[0]).to.be.equal('foo')
+      expect(params[1]).to.be.equal('bar')
+      expect(pathname).to.be.equal('foo/bar')
+
+      fooBarStream.end()
+
+      done()
+    })
+
+    router.push('#foo/bar')
+  })
+
   it('a subroute stream gets properly created', done => {
     const fooBarStream = route(':foo/:bar')
 
-    fooBarStream.on.value(url => {
-      expect(url.params[0]).to.be.equal('foo')
-      expect(url.params[1]).to.be.equal('bar')
+    fooBarStream.on.value(({params}) => {
+      expect(params[0]).to.be.equal('foo')
+      expect(params[1]).to.be.equal('bar')
 
       fooBarStream.end()
 

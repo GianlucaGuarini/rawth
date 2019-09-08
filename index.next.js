@@ -5,6 +5,7 @@ import pathToRegexp from 'path-to-regexp'
 // dom events
 const POPSTATE = 'popstate'
 const HASHCHANGE = 'hashchange'
+const HASH = '#'
 
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
@@ -22,11 +23,16 @@ function combine(dispatcherStream, receiverStream) {
   return receiverStream
 }
 
+// just return the current window location
+const readWindowLocation = () => window.location
+
 // check whether the window object is defined
 export const hasWindow = () => typeof window !== 'undefined'
 
 // create the streaming router
-export const router = hasWindow() ? fromDOM(window, `${POPSTATE} ${HASHCHANGE}`) : erre()
+export const router = hasWindow() ?
+  fromDOM(window, `${POPSTATE} ${HASHCHANGE}`).connect(readWindowLocation) :
+  erre()
 
 // url constructor
 export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
@@ -47,10 +53,17 @@ export const defaults = {
 
 /**
  * Replace the base path from a path
- * @param   {string} path [description]
+ * @param   {string} path - router path string
  * @returns {string} path cleaned up without the base
  */
 export const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
+
+/**
+ * Replace the hash char at beginning of a route
+ * @param   {string} path - router path string
+ * @returns {string} path cleaned up without the base
+ */
+export const replaceHash = path => path.startsWith(HASH) ? path.substring(1) : path
 
 /**
  * Merge the user options with the defaults
@@ -92,7 +105,6 @@ export const parse = (path, pathRegExp, options) => {
   return url
 }
 
-
 /**
  * Return true if a path will be matched
  * @param   {string} path - target path
@@ -110,16 +122,15 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
 export default function createRoute(path, options) {
   const pathRegExp = pathToRegexp(path)
   const matchOrSkip = path => {
-    if (match(path, pathRegExp)) {
-      return path
-    }
-
+    if (match(path, pathRegExp)) return path
     return erre.cancel()
   }
+  const parseRoute = path => parse(path, pathRegExp, options)
 
   return combine(router, erre(
     replaceBase,
+    replaceHash,
     matchOrSkip,
-    path => parse(path, pathRegExp, options)
+    parseRoute
   ))
 }
