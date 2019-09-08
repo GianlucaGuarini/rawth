@@ -1,6 +1,6 @@
 # rawth
 
-Pure functional isomorphic router based on streams
+Pure functional isomorphic router based on streams. It works consistently on modern browsers and on node.
 
 [![Build Status][travis-image]][travis-url]
 
@@ -12,6 +12,8 @@ Pure functional isomorphic router based on streams
 [![MIT License][license-image]][license-url]
 
 ## Usage
+
+Any `rawth.route` function creates an [erre stream](https://github.com/GianlucaGuarini/erre) connected to the main router stream. These sub-streams will be activated only when their paths will match the current router path. For example:
 
 ```js
 import route, { router } from 'rawth'
