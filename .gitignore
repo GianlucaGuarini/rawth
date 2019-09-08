@@ -41,3 +41,4 @@ jspm_packages
 
 # Ignore output file
 rawth.js
+rawth.min.js
