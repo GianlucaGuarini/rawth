@@ -15,7 +15,9 @@
     "test": "npm run lint && nyc mocha -r esm test.js"
   },
   "files": [
-    "index.next.js"
+    "index.next.js",
+    "rawth.js",
+    "rawth.min.js"
   ],
   "repository": {
     "type": "git",
