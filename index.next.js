@@ -27,13 +27,25 @@ function combine(dispatcherStream, receiverStream) {
 // just return the current window location
 const readWindowLocation = () => window.location
 
+export const generateBasePath = () => {
+  if (hasWindow()) {
+    const loc = window.location
+
+    return `${loc.protocol}//${loc.host}`
+  }
+
+  return ''
+}
+
 // check whether the window object is defined
 export const hasWindow = () => typeof window !== 'undefined'
 
 // create the streaming router
-export const router = hasWindow() ?
-  fromDOM(window, `${POPSTATE} ${HASHCHANGE}`).connect(readWindowLocation) :
-  erre()
+export const router = (
+  hasWindow() ?
+    fromDOM(window, `${POPSTATE} ${HASHCHANGE}`).connect(readWindowLocation) :
+    erre()
+).connect(String) // cast the values of this stream always to string
 
 // url constructor
 export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
@@ -41,7 +53,7 @@ export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('u
 // general configuration object
 export const defaults = {
   // custom option
-  base: undefined,
+  base: generateBasePath(),
   // pathToRegexp options
   sensitive: false,
   strict: false,

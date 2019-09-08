@@ -13,22 +13,6 @@ Pure functional isomorphic router based on streams
 
 ## Usage
 
-### In Browsers
-```js
-import route from 'rawth'
-
-route('/users/:user').on.value(({params}) => {
-  const [user] = params
-
-  console.log(`Hello dear ${user}`)
-})
-
-// just use the browser history.pushState event to dispatch router events
-history.pushState({ page: 1 }, 'Users Page', '/users/gianluca')
-```
-
-### In node
-
 ```js
 import route, { router } from 'rawth'
 
@@ -38,7 +22,7 @@ route('/users/:user').on.value(({params}) => {
   console.log(`Hello dear ${user}`)
 })
 
-// you can dispatch router events also innode
+// you can dispatch router events at any time
 router.push('/users/gianluca')
 ```
 
