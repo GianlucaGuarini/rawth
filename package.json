@@ -9,7 +9,7 @@
     "prepare": "npm run build && npm test",
     "lint": "eslint index.next.js test.js rollup.config.js",
     "build": "rollup -c",
-    "cov-submit": "RAWTH_COV=1 cat ./coverage/report-lcov/lcov.info | coveralls",
+    "cov-submit": "RAWTH_COV=1 cat ./coverage/lcov.info | coveralls",
     "cov-report": "nyc report --reporter=lcov --reporter=text",
     "doc": "documentation readme index.next.js -s API",
     "pretest": "npm run build",
@@ -23,8 +23,12 @@
     "url": "git+https://github.com/GianlucaGuarini/rawth.git"
   },
   "keywords": [
-    "es6",
-    "es2015"
+    "stream",
+    "streams",
+    "functional"
+    "route",
+    "URL",
+    "router"
   ],
   "author": "Gianluca Guarini <gianluca.guarini@gmail.com> (http://gianlucaguarini.com)",
   "license": "MIT",
