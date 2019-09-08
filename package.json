@@ -1,7 +1,7 @@
 {
   "name": "rawth",
   "version": "0.0.0",
-  "description": "Pure functional isomorphic route based on streams",
+  "description": "Pure functional isomorphic router based on streams",
   "main": "rawth.js",
   "jsnext:main": "index.next.js",
   "module": "index.next.js",
@@ -11,7 +11,6 @@
     "build": "rollup -c",
     "cov-submit": "RAWTH_COV=1 cat ./coverage/lcov.info | coveralls",
     "cov-report": "nyc report --reporter=lcov --reporter=text",
-    "doc": "documentation readme index.next.js -s API",
     "pretest": "npm run build",
     "test": "npm run lint && nyc mocha -r esm test.js"
   },

@@ -11,26 +11,35 @@ Pure functional isomorphic router based on streams
 ![rawth size][lib-size]
 [![MIT License][license-image]][license-url]
 
-# :construction: WIP Come back soon :construction:
-
 ## Usage
 
+### In Browsers
 ```js
-import route, { router } from 'rawth'
+import route from 'rawth'
 
-const userStreamRoute = route('/users/:user')
-
-userStreamRoute.on.value(({params}) => {
+route('/users/:user').on.value(({params}) => {
   const [user] = params
 
   console.log(`Hello dear ${user}`)
 })
 
-// you can dispatch router events in node
-router.push('/users/gianluca')
-
-// or just use the browser history.pushState event
+// just use the browser history.pushState event to dispatch router events
 history.pushState({ page: 1 }, 'Users Page', '/users/gianluca')
+```
+
+### In node
+
+```js
+import route, { router } from 'rawth'
+
+route('/users/:user').on.value(({params}) => {
+  const [user] = params
+
+  console.log(`Hello dear ${user}`)
+})
+
+// you can dispatch router events also innode
+router.push('/users/gianluca')
 ```
 
 [travis-image]:https://img.shields.io/travis/GianlucaGuarini/rawth.svg?style=flat-square
@@ -50,7 +59,4 @@ history.pushState({ page: 1 }, 'Users Page', '/users/gianluca')
 
 [codeclimate-image]:https://api.codeclimate.com/v1/badges/5a4b8cf4736254115cb3/maintainability
 [codeclimate-url]:https://codeclimate.com/github/GianlucaGuarini/rawth/maintainability
-
-
-## API
 

@@ -9,6 +9,7 @@ const HASH = '#'
 
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
+ * @private
  * @param   {Stream} dispatcherStream - main stream dispatching events
  * @param   {Stream} receiverStream - sub stream receiving events from the dispatcher
  * @returns {Stream} receiverStream
@@ -37,7 +38,7 @@ export const router = hasWindow() ?
 // url constructor
 export const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
 
-/* @type {object} general configuration object */
+// general configuration object
 export const defaults = {
   // custom option
   base: undefined,
