@@ -2,17 +2,17 @@ import erre from 'erre'
 import pathToRegexp from 'path-to-regexp'
 
 // check whether the window object is defined
-const hasWindow = () => typeof window !== 'undefined'
+const hasWindow = typeof window !== 'undefined'
 
 // the url parsing function depends on the platform, on node we rely on the 'url' module
-const parseURL = (...args) => hasWindow() ? new URL(...args) : require('url').parse(...args)
+const parseURL = (...args) => hasWindow ? new URL(...args) : require('url').parse(...args)
 
 /**
  * Replace the base path from a path
  * @param   {string} path - router path string
  * @returns {string} path cleaned up without the base
  */
-const replaceBase = path => defaults.base ? path.replace(defaults.base, '') : path
+const replaceBase = path => path.replace(defaults.base, '')
 
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
@@ -72,7 +72,7 @@ export const toPath = (path, params, options) => compile(path, options)(params)
 /**
  * Parse a string path generating an object containing
  * @param   {string} path - target path
- * @param   {RegExp} pathRegExp - path transformed to regex via pathToRegexp
+ * @param   {RegExp} pathRegExp - path transformed to regexp via pathToRegexp
  * @param   {Object} options - object containing the base path
  * @returns {URL} url object enhanced with the `match` attribute
  */
@@ -90,7 +90,7 @@ export const parse = (path, pathRegExp, options) => {
 /**
  * Return true if a path will be matched
  * @param   {string} path - target path
- * @param   {RegExp} pathRegExp - path transformed to regex via pathToRegexp
+ * @param   {RegExp} pathRegExp - path transformed to regexp via pathToRegexp
  * @returns {boolean} true if the path matches the regexp
  */
 export const match = (path, pathRegExp) => pathRegExp.test(path)
@@ -103,7 +103,7 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  */
 export default function createRoute(path, options) {
   const pathRegExp = pathToRegexp(path)
-  const matchOrSkip = path => (match(path, pathRegExp)) ? path : erre.cancel()
+  const matchOrSkip = path => match(path, pathRegExp) ? path : erre.cancel()
   const parseRoute = path => parse(path, pathRegExp, options)
 
   return joinStreams(router, erre(
