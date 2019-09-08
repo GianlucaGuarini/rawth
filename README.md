@@ -1,5 +1,5 @@
 <p align="righ">
-  <img src="https://cdn.rawgit.com/GianlucaGuarini/rawth/master/rawth-logo.png" alt="rawth"/>
+  <img src="https://raw.githubusercontent.com/GianlucaGuarini/rawth/master/rawth-logo.png" alt="rawth"/>
 </p>
 
 
