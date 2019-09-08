@@ -1,6 +1,6 @@
 {
   "name": "rawth",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Pure functional isomorphic router based on streams",
   "main": "rawth.js",
   "jsnext:main": "index.next.js",
