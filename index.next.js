@@ -31,8 +31,14 @@ const joinStreams = (dispatcherStream, receiverStream) => {
   return receiverStream
 }
 
+const logError = error => {
+  if (defaults.silent) return
+
+  throw new Error(error)
+}
+
 // create the streaming router
-export const router = erre(String) // cast the values of this stream always to string
+export const router = erre(String).on.error(logError) // cast the values of this stream always to string
 
 /* @type {object} general configuration object */
 export const defaults = {
@@ -103,7 +109,7 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  * @returns {Stream} new route stream
  */
 export default function createRoute(path, options) {
-  const pathRegExp = pathToRegexp(path)
+  const pathRegExp = pathToRegexp(path, [], options)
   const matchOrSkip = path => match(path, pathRegExp) ? path : erre.cancel()
   const parseRoute = path => parse(path, pathRegExp, options)
 
@@ -111,5 +117,5 @@ export default function createRoute(path, options) {
     replaceBase,
     matchOrSkip,
     parseRoute
-  ))
+  )).on.error(logError)
 }
