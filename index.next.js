@@ -32,7 +32,7 @@ const joinStreams = (dispatcherStream, receiverStream) => {
 }
 
 const logError = error => {
-  if (defaults.silent) return
+  if (defaults.silentErrors) return
 
   throw new Error(error)
 }
@@ -44,6 +44,7 @@ export const router = erre(String).on.error(logError) // cast the values of this
 export const defaults = {
   // custom option
   base: '',
+  silentErrors: false,
   // pathToRegexp options
   sensitive: false,
   strict: false,
