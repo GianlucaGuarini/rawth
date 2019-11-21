@@ -1,12 +1,11 @@
 import route, {
-  compile,
   defaults,
   match,
   mergeOptions,
-  parse,
   router,
   toPath,
-  toRegexp
+  toRegexp,
+  toURL
 } from './index.next'
 import {expect} from 'chai'
 
@@ -27,20 +26,14 @@ describe('rawth', function() {
     expect(defaults).to.be.ok
   })
 
-  it('the compile method returns valid string paths', () => {
-    const customToPath = compile('http://example.com/:foo/:bar')
-
-    expect(customToPath({ foo: 'foo', bar: 'bar' })).to.be.equal('http://example.com/foo/bar')
-  })
-
   it('the toPath method returns valid string paths', () => {
     expect(toPath('http://example.com/:foo/:bar',{ foo: 'foo', bar: 'bar' }))
       .to.be.equal('http://example.com/foo/bar')
   })
 
-  it('the parse method will return a proper URL object', () => {
+  it('the toURL method will return a proper URL object', () => {
     const path = toRegexp(':foo/:bar')
-    const url = parse('foo/bar', path)
+    const url = toURL('foo/bar', path)
 
     expect(url.pathname).to.be.equal('foo/bar')
     expect(url.hostname).to.be.equal(null)

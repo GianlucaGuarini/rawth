@@ -1,5 +1,5 @@
+import pathToRegexp, { compile } from 'path-to-regexp'
 import erre from 'erre'
-import pathToRegexp from 'path-to-regexp'
 
 // check whether the window object is defined
 const hasWindow = typeof window !== 'undefined'
@@ -14,6 +14,13 @@ const parseURL = (...args) => hasWindow ? new URL(...args) : require('url').pars
  * @returns {string} path cleaned up without the base
  */
 const replaceBase = path => path.replace(defaults.base, '')
+
+/**
+ * Try to match the current path or skip it
+ * @param   {RegEx} pathRegExp - target path transformed by pathToRegexp
+ * @returns {string|Symbol} if the path match we return it otherwise we cancel the stream
+ */
+const matchOrSkip = pathRegExp => path => match(path, pathRegExp) ? path : erre.cancel()
 
 /**
  * Combine 2 streams connecting the events of dispatcherStream to the receiverStream
@@ -31,14 +38,19 @@ const joinStreams = (dispatcherStream, receiverStream) => {
   return receiverStream
 }
 
-const logError = error => {
+/**
+ * Error handling function
+ * @param   {Error} error - error to catch
+ * @returns {void}
+ */
+const panic = error => {
   if (defaults.silentErrors) return
 
   throw new Error(error)
 }
 
 // create the streaming router
-export const router = erre(String).on.error(logError) // cast the values of this stream always to string
+export const router = erre(String).on.error(panic) // cast the values of this stream always to string
 
 /* @type {object} general configuration object */
 export const defaults = {
@@ -62,9 +74,6 @@ export const defaults = {
  */
 export const mergeOptions = options => ({...defaults, ...options})
 
-/* {@link https://github.com/pillarjs/path-to-regexp#compile-reverse-path-to-regexp} */
-export const compile = (path, options) => pathToRegexp.compile(path, mergeOptions(options))
-
 /* {@link https://github.com/pillarjs/path-to-regexp#usage} */
 export const toRegexp = (path, keys, options) => pathToRegexp(path, keys, mergeOptions(options))
 
@@ -75,7 +84,7 @@ export const toRegexp = (path, keys, options) => pathToRegexp(path, keys, mergeO
  * @param   {Object} options - pathToRegexp options object
  * @returns {string} computed url string
  */
-export const toPath = (path, params, options) => compile(path, options)(params)
+export const toPath = (path, params, options) => compile(path, mergeOptions(options))(params)
 
 /**
  * Parse a string path generating an object containing
@@ -84,7 +93,7 @@ export const toPath = (path, params, options) => compile(path, options)(params)
  * @param   {Object} options - object containing the base path
  * @returns {URL} url object enhanced with the `match` attribute
  */
-export const parse = (path, pathRegExp, options) => {
+export const toURL = (path, pathRegExp, options) => {
   const {base} = mergeOptions(options)
   const [, ...params] = pathRegExp.exec(path)
   const url = parseURL(path, base)
@@ -104,6 +113,19 @@ export const parse = (path, pathRegExp, options) => {
 export const match = (path, pathRegExp) => pathRegExp.test(path)
 
 /**
+ * Factory function to create an sequence of functions to pass to erre.js
+ * This function will be used in the erre stream
+ * @param   {RegExp} pathRegExp - path transformed to regexp via pathToRegexp
+ * @param   {Object} options - pathToRegexp options object
+ * @returns {Array} a functions array that will be used as stream pipe for erre.js
+ */
+export const createURLStreamPipe = (pathRegExp, options) => [
+  replaceBase,
+  matchOrSkip(pathRegExp, options),
+  path => toURL(path, pathRegExp, options)
+]
+
+/**
  * Create a fork of the main router stream
  * @param   {string} path - route to match
  * @param   {Object} options - pathToRegexp options object
@@ -111,12 +133,7 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  */
 export default function createRoute(path, options) {
   const pathRegExp = pathToRegexp(path, [], options)
-  const matchOrSkip = path => match(path, pathRegExp) ? path : erre.cancel()
-  const parseRoute = path => parse(path, pathRegExp, options)
+  const URLStream = erre(...createURLStreamPipe(pathRegExp, options))
 
-  return joinStreams(router, erre(
-    replaceBase,
-    matchOrSkip,
-    parseRoute
-  )).on.error(logError)
+  return joinStreams(router, URLStream).on.error(panic)
 }
