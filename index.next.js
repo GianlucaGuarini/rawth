@@ -1,4 +1,4 @@
-import pathToRegexp, { compile } from 'path-to-regexp'
+import { compile, pathToRegexp } from 'path-to-regexp'
 import erre from 'erre'
 
 // check whether the window object is defined
@@ -62,9 +62,10 @@ export const defaults = {
   strict: false,
   end: true,
   start: true,
-  delimiter: '/',
+  delimiter: '/#?',
+  encode: undefined,
   endsWith: undefined,
-  whitelist: undefined
+  prefixes: './'
 }
 
 /**

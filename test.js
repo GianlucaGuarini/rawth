@@ -27,8 +27,8 @@ describe('rawth', function() {
   })
 
   it('the toPath method returns valid string paths', () => {
-    expect(toPath('http://example.com/:foo/:bar',{ foo: 'foo', bar: 'bar' }))
-      .to.be.equal('http://example.com/foo/bar')
+    expect(toPath('/:foo/:bar', { foo: 'foo', bar: 'bar' }))
+      .to.be.equal('/foo/bar')
   })
 
   it('the toURL method will return a proper URL object', () => {
@@ -42,11 +42,11 @@ describe('rawth', function() {
   })
 
   it('the match method will return true only for the routes matching the test regex', () => {
-    const path = toRegexp('http://example.com/:foo/:bar')
+    const path = toRegexp('/:foo/:bar')
 
-    expect(match('http://example.com/foo/bar', path)).to.be.ok
-    expect(match('http://example.com/foo/bar/', path)).to.be.ok
-    expect(match('http://example.com/foo', path)).to.be.not.ok
+    expect(match('/foo/bar', path)).to.be.ok
+    expect(match('/foo/bar/', path)).to.be.ok
+    expect(match('/foo', path)).to.be.not.ok
   })
 
   it('the streaming router gets exported', () => {
