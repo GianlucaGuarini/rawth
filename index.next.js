@@ -3,6 +3,7 @@ import erre from 'erre'
 
 // check whether the window object is defined
 const hasWindow = typeof window !== 'undefined'
+const isString = str => typeof str === 'string'
 
 // the url parsing function depends on the platform, on node we rely on the 'url' module
 /* istanbul ignore next */
@@ -49,8 +50,11 @@ const panic = error => {
   throw new Error(error)
 }
 
+// make sure that the router will always receive strings params
+export const filterStrings = str => isString(str) ? str : erre.cancel()
+
 // create the streaming router
-export const router = erre(String).on.error(panic) // cast the values of this stream always to string
+export const router = erre(filterStrings).on.error(panic) // cast the values of this stream always to string
 
 /* @type {object} general configuration object */
 export const defaults = {

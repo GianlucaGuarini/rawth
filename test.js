@@ -7,6 +7,7 @@ import route, {
   toRegexp,
   toURL
 } from './index.next'
+import erre from 'erre'
 import {expect} from 'chai'
 
 describe('rawth', function() {
@@ -64,6 +65,8 @@ describe('rawth', function() {
       fooBarStream.end()
 
       done()
+
+      return erre.off()
     })
 
     router.push('#foo/bar')
@@ -79,6 +82,8 @@ describe('rawth', function() {
       fooBarStream.end()
 
       done()
+
+      return erre.off()
     })
 
     router.push('foo/bar')
@@ -86,11 +91,25 @@ describe('rawth', function() {
 
   it('subroute streams don\'t get called if the route doesn\'t match', () => {
     const fooBarStream = route(':foo/:bar')
+    const fail = () => expect.fail('you should never get here')
 
-    fooBarStream.on.value(() => {
-      expect.fail('you should never get here')
-    })
-
+    fooBarStream.on.value(fail)
     router.push('foo')
+    fooBarStream.off.value(fail)
   })
+
+  it('bypass router arguments different from strings', (done) => ((count = 0) => {
+    const increment = () => ++count
+
+    router.on.value(increment)
+
+    router.push('foo/baz')
+    router.push(Symbol())
+
+    setTimeout(() => {
+      expect(count).to.be.equal(1)
+      router.off.value(increment)
+      done()
+    }, 100)
+  })())
 })
