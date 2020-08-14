@@ -25,7 +25,7 @@ Any `rawth.route` function creates an [erre stream](https://github.com/GianlucaG
 import route, { router } from 'rawth'
 
 route('/users/:user').on.value(({params}) => {
-  const [user] = params
+  const {user} = params
 
   console.log(`Hello dear ${user}`)
 })
@@ -40,7 +40,7 @@ The argument passed to the subscribed functions is an [`URL`](https://developer.
 import route, { router } from 'rawth'
 
 route('/:group/:user').on.value(({params}) => {
-  const [group, user] = params
+  const {group, user} = params
 
   console.log(`Hello dear ${user}, you are part of the ${group} group`)
 })

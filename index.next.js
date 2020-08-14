@@ -1,4 +1,4 @@
-import { compile, pathToRegexp } from 'path-to-regexp'
+import {compile, pathToRegexp} from 'path-to-regexp'
 import erre from 'erre'
 
 // check whether the window object is defined
@@ -98,13 +98,17 @@ export const toPath = (path, params, options) => compile(path, mergeOptions(opti
  * @param   {Object} options - object containing the base path
  * @returns {URL} url object enhanced with the `match` attribute
  */
-export const toURL = (path, pathRegExp, options) => {
+export const toURL = (path, pathRegExp, options = {}) => {
   const {base} = mergeOptions(options)
   const [, ...params] = pathRegExp.exec(path)
   const url = parseURL(path, base)
 
   // extend the url object adding the matched params
-  url.params = params
+  url.params = params.reduce((acc, param, index) => {
+    const key = options.keys && options.keys[index]
+    if (key) acc[key.name] = param
+    return acc
+  }, {})
 
   return url
 }
@@ -137,8 +141,12 @@ export const createURLStreamPipe = (pathRegExp, options) => [
  * @returns {Stream} new route stream
  */
 export default function createRoute(path, options) {
-  const pathRegExp = pathToRegexp(path, [], options)
-  const URLStream = erre(...createURLStreamPipe(pathRegExp, options))
+  const keys = []
+  const pathRegExp = pathToRegexp(path, keys, options)
+  const URLStream = erre(...createURLStreamPipe(pathRegExp, {
+    ...options,
+    keys
+  }))
 
   return joinStreams(router, URLStream).on.error(panic)
 }

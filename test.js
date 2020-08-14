@@ -28,18 +28,19 @@ describe('rawth', function() {
   })
 
   it('the toPath method returns valid string paths', () => {
-    expect(toPath('/:foo/:bar', { foo: 'foo', bar: 'bar' }))
+    expect(toPath('/:foo/:bar', {foo: 'foo', bar: 'bar'}))
       .to.be.equal('/foo/bar')
   })
 
   it('the toURL method will return a proper URL object', () => {
-    const path = toRegexp(':foo/:bar')
-    const url = toURL('foo/bar', path)
+    const keys = []
+    const path = toRegexp(':foo/:bar', keys)
+    const url = toURL('foo/bar', path, {keys})
 
     expect(url.pathname).to.be.equal('foo/bar')
     expect(url.hostname).to.be.equal(null)
-    expect(url.params[0]).to.be.equal('foo')
-    expect(url.params[1]).to.be.equal('bar')
+    expect(url.params.foo).to.be.equal('foo')
+    expect(url.params.bar).to.be.equal('bar')
   })
 
   it('the match method will return true only for the routes matching the test regex', () => {
@@ -58,8 +59,8 @@ describe('rawth', function() {
     const fooBarStream = route('#:foo/:bar')
 
     fooBarStream.on.value(({params, hash}) => {
-      expect(params[0]).to.be.equal('foo')
-      expect(params[1]).to.be.equal('bar')
+      expect(params.foo).to.be.equal('foo')
+      expect(params.bar).to.be.equal('bar')
       expect(hash).to.be.equal('#foo/bar')
 
       fooBarStream.end()
@@ -76,8 +77,8 @@ describe('rawth', function() {
     const fooBarStream = route(':foo/:bar')
 
     fooBarStream.on.value(({params}) => {
-      expect(params[0]).to.be.equal('foo')
-      expect(params[1]).to.be.equal('bar')
+      expect(params.foo).to.be.equal('foo')
+      expect(params.bar).to.be.equal('bar')
 
       fooBarStream.end()
 
