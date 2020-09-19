@@ -41,14 +41,14 @@
     "@gianlucaguarini/eslint-config": "^2.0.0",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
-    "eslint": "^7.6.0",
+    "eslint": "^7.9.0",
     "esm": "^3.2.25",
-    "mocha": "^8.1.1",
+    "mocha": "^8.1.3",
     "nyc": "^15.1.0",
-    "rollup": "^2.25.0",
+    "rollup": "^2.27.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.0"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "erre": "^2.2.0",
