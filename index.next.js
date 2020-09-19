@@ -2,12 +2,12 @@ import {compile, pathToRegexp} from 'path-to-regexp'
 import erre from 'erre'
 
 // check whether the window object is defined
-const hasWindow = typeof window !== 'undefined'
+const isNode = typeof process !== 'undefined'
 const isString = str => typeof str === 'string'
 
 // the url parsing function depends on the platform, on node we rely on the 'url' module
 /* istanbul ignore next */
-const parseURL = (...args) => hasWindow ? new URL(...args) : require('url').parse(...args)
+const parseURL = (...args) => isNode ? require('url').parse(...args) : new URL(...args)
 
 /**
  * Replace the base path from a path
