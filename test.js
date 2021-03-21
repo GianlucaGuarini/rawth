@@ -99,6 +99,24 @@ describe('rawth', function() {
     fooBarStream.off.value(fail)
   })
 
+  it('encoded strings will be decoded with decodeURIComponent', done => {
+    const fooBarStream = route(':foo/:bar\\?(.*)')
+
+    fooBarStream.on.value((path) => {
+      expect(path.params.foo).to.be.equal('foo')
+      expect(path.params.bar).to.be.equal('bar')
+      expect(path.query).to.be.equal('x=test')
+
+      fooBarStream.end()
+
+      done()
+
+      return erre.off()
+    })
+
+    router.push('foo/bar%3Fx%3Dtest')
+  })
+
   it('bypass router arguments different from strings', (done) => ((count = 0) => {
     const increment = () => ++count
 

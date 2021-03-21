@@ -129,6 +129,7 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  * @returns {Array} a functions array that will be used as stream pipe for erre.js
  */
 export const createURLStreamPipe = (pathRegExp, options) => [
+  decodeURIComponent,
   replaceBase,
   matchOrSkip(pathRegExp, options),
   path => toURL(path, pathRegExp, options)
