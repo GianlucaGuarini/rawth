@@ -106,7 +106,7 @@ export const toURL = (path, pathRegExp, options = {}) => {
   // extend the url object adding the matched params
   url.params = params.reduce((acc, param, index) => {
     const key = options.keys && options.keys[index]
-    if (key) acc[key.name] = param
+    if (key) acc[key.name] = decodeURIComponent(param)
     return acc
   }, {})
 
@@ -129,7 +129,7 @@ export const match = (path, pathRegExp) => pathRegExp.test(path)
  * @returns {Array} a functions array that will be used as stream pipe for erre.js
  */
 export const createURLStreamPipe = (pathRegExp, options) => [
-  decodeURIComponent,
+  decodeURI,
   replaceBase,
   matchOrSkip(pathRegExp, options),
   path => toURL(path, pathRegExp, options)
