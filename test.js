@@ -99,13 +99,13 @@ describe('rawth', function() {
     fooBarStream.off.value(fail)
   })
 
-  it('encoded strings will be decoded with decodeURIComponent', done => {
+  it('encoded URIs will be decoded with decodeURI', done => {
     const fooBarStream = route(':foo/:bar\\?(.*)')
 
     fooBarStream.on.value((path) => {
       expect(path.params.foo).to.be.equal('foo')
-      expect(path.params.bar).to.be.equal('bar')
-      expect(path.query).to.be.equal('x=test')
+      expect(path.params.bar).to.be.equal('ba r')
+      expect(path.query).to.be.equal('x=test&y=é')
 
       fooBarStream.end()
 
@@ -114,7 +114,27 @@ describe('rawth', function() {
       return erre.off()
     })
 
-    router.push('foo/bar%3Fx%3Dtest')
+    router.push('foo/ba%20r?x=test&y=%C3%A9')
+  })
+
+  it('encoded path elements (but NOT query) will be decoded with decodeURIComponent', done => {
+    const fooBarStream = route(':foo/:bar\\?(.*)')
+
+    fooBarStream.on.value((path) => {
+      expect(path.params.foo).to.be.equal('foo;v=1')
+      expect(path.params.bar).to.be.equal('ba&r')
+      // NOTE: decodeURIComponent() would also decode component separators such as /, ?, &
+      // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI
+      expect(path.query).to.be.equal('y=%26&z=end')  // %26 is &
+
+      fooBarStream.end()
+
+      done()
+
+      return erre.off()
+    })
+
+    router.push('foo;v=1/ba%26r?y=%26&z=end')
   })
 
   it('bypass router arguments different from strings', (done) => ((count = 0) => {
