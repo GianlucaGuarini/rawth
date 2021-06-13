@@ -106,7 +106,7 @@ export const toURL = (path, pathRegExp, options = {}) => {
   // extend the url object adding the matched params
   url.params = params.reduce((acc, param, index) => {
     const key = options.keys && options.keys[index]
-    if (key) acc[key.name] = decodeURIComponent(param)
+    if (key) acc[key.name] = param ? decodeURIComponent(param) : param
     return acc
   }, {})
 
