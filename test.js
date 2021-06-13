@@ -43,6 +43,15 @@ describe('rawth', function() {
     expect(url.params.bar).to.be.equal('bar')
   })
 
+  it('the toURL method will provide undefined for empty optional parameters', () => {
+    const keys = []
+    const path = toRegexp(':foo?/:bar?', keys)
+    const url = toURL('foo', path, {keys})
+
+    expect(url.params.foo).to.be.equal('foo')
+    expect(url.params.bar).to.be.equal(undefined)
+  })
+
   it('the match method will return true only for the routes matching the test regex', () => {
     const path = toRegexp('/:foo/:bar')
 
