@@ -8,7 +8,7 @@
 ---
 
 
-[![Build Status][travis-image]][travis-url]
+[![Build Status][ci-image]][ci-url]
 
 [![NPM version][npm-version-image]][npm-url]
 [![NPM downloads][npm-downloads-image]][npm-url]
@@ -77,8 +77,8 @@ import { defaults } from 'rawth'
 defaults.base = 'http://localhost:8000'
 ```
 
-[travis-image]:https://img.shields.io/travis/GianlucaGuarini/rawth.svg?style=flat-square
-[travis-url]:https://travis-ci.org/GianlucaGuarini/rawth
+[ci-image]:https://github.com/GianlucaGuarini/rawth/actions/workflows/test.yml/badge.svg
+[ci-url]:https://github.com/GianlucaGuarini/rawth/actions/workflows/test.yml
 
 [license-image]:http://img.shields.io/badge/license-MIT-000000.svg?style=flat-square
 [license-url]:LICENSE
@@ -94,4 +94,3 @@ defaults.base = 'http://localhost:8000'
 
 [codeclimate-image]:https://api.codeclimate.com/v1/badges/5a4b8cf4736254115cb3/maintainability
 [codeclimate-url]:https://codeclimate.com/github/GianlucaGuarini/rawth/maintainability
-

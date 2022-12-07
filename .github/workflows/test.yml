@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run build
+      - run: npm test
       - name: Generate coverage report
         if: ${{ success() && github.event_name != 'pull_request' && matrix.node-version == '19.x' }}
         run: npm run cov-report

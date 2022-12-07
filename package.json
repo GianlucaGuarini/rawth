@@ -15,7 +15,6 @@
     "prepublishOnly": "npm run build && npm test",
     "lint": "eslint index.next.js test.js rollup.config.js",
     "build": "rollup -c",
-    "cov-submit": "RAWTH_COV=1 cat ./coverage/lcov.info | coveralls",
     "cov-report": "c8 report --reporter=lcov --reporter=text",
     "test": "npm run lint && c8 mocha test.js"
   },
