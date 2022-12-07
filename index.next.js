@@ -1,13 +1,8 @@
 import {compile, pathToRegexp} from 'path-to-regexp'
 import erre from 'erre'
 
-// check whether the window object is defined
-const isNode = typeof process !== 'undefined'
 const isString = str => typeof str === 'string'
-
-// the url parsing function depends on the platform, on node we rely on the 'url' module
-/* istanbul ignore next */
-const parseURL = (...args) => isNode ? require('url').parse(...args) : new URL(...args)
+const parseURL = (...args) => new URL(...args)
 
 /**
  * Replace the base path from a path
@@ -59,7 +54,7 @@ export const router = erre(filterStrings).on.error(panic) // cast the values of 
 /* @type {object} general configuration object */
 export const defaults = {
   // custom option
-  base: '',
+  base: 'http://localhost',
   silentErrors: false,
   // pathToRegexp options
   sensitive: false,

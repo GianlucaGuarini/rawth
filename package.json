@@ -3,8 +3,14 @@
   "version": "2.1.0",
   "description": "Pure functional isomorphic router based on streams",
   "main": "rawth.js",
-  "jsnext:main": "index.next.js",
-  "module": "index.next.js",
+  "type": "module",
+  "exports": {
+    "node": {
+      "import": "./index.js",
+      "require": "./rawth.js"
+    },
+    "default": "./index.next.js"
+  },
   "scripts": {
     "prepare": "npm run build && npm test",
     "lint": "eslint index.next.js test.js rollup.config.js",
@@ -12,7 +18,7 @@
     "cov-submit": "RAWTH_COV=1 cat ./coverage/lcov.info | coveralls",
     "cov-report": "nyc report --reporter=lcov --reporter=text",
     "pretest": "npm run build",
-    "test": "npm run lint && nyc mocha -r esm test.js"
+    "test": "npm run lint && nyc mocha test.js"
   },
   "files": [
     "index.next.js",
@@ -39,19 +45,18 @@
   "homepage": "https://github.com/GianlucaGuarini/rawth#readme",
   "devDependencies": {
     "@gianlucaguarini/eslint-config": "^2.0.0",
-    "chai": "^4.3.4",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.28.0",
-    "esm": "^3.2.25",
-    "mocha": "^8.4.0",
+    "chai": "^4.3.7",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.29.0",
+    "mocha": "^10.1.0",
     "nyc": "^15.1.0",
-    "rollup": "^2.51.2",
+    "rollup": "^3.6.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "erre": "^2.2.0",
-    "path-to-regexp": "^6.2.0"
+    "path-to-regexp": "^6.2.1"
   }
 }

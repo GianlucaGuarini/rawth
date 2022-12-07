@@ -6,16 +6,11 @@ import route, {
   toPath,
   toRegexp,
   toURL
-} from './index.next'
+} from './index.next.js'
 import erre from 'erre'
 import {expect} from 'chai'
 
 describe('rawth', function() {
-  beforeEach(() => {
-    // reset the base
-    defaults.base = undefined
-  })
-
   it('the options can be properly merged', () => {
     const options = mergeOptions({foo: 'foo', base: 'buz'})
 
@@ -37,14 +32,15 @@ describe('rawth', function() {
     const path = toRegexp(':foo/:bar', keys)
     const url = toURL('foo/bar', path, {keys})
 
-    expect(url.pathname).to.be.equal('foo/bar')
-    expect(url.hostname).to.be.equal(null)
+    expect(url.pathname).to.be.equal('/foo/bar')
+    expect(url.hostname).to.be.equal('localhost')
     expect(url.params.foo).to.be.equal('foo')
     expect(url.params.bar).to.be.equal('bar')
   })
 
   it('the toURL method will provide undefined for empty optional parameters', () => {
     const keys = []
+
     const path = toRegexp(':foo?/:bar?', keys)
     const url = toURL('foo', path, {keys})
 
@@ -114,7 +110,7 @@ describe('rawth', function() {
     fooBarStream.on.value((path) => {
       expect(path.params.foo).to.be.equal('foo')
       expect(path.params.bar).to.be.equal('ba r')
-      expect(path.query).to.be.equal('x=test&y=é')
+      expect(path.search).to.be.equal('?x=test&y=%C3%A9')
 
       fooBarStream.end()
 
@@ -134,7 +130,7 @@ describe('rawth', function() {
       expect(path.params.bar).to.be.equal('ba&r')
       // NOTE: decodeURIComponent() would also decode component separators such as /, ?, &
       // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI
-      expect(path.query).to.be.equal('y=%26&z=end')  // %26 is &
+      expect(path.search).to.be.equal('?y=%26&z=end')  // %26 is &
 
       fooBarStream.end()
 
