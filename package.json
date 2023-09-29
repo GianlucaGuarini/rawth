@@ -2,14 +2,13 @@
   "name": "rawth",
   "version": "2.1.0",
   "description": "Pure functional isomorphic router based on streams",
-  "main": "rawth.js",
+  "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "exports": {
-    "node": {
-      "import": "./index.js",
-      "require": "./rawth.js"
-    },
-    "default": "./index.next.js"
+    "types": "./index.d.ts",
+    "import": "./index.js",
+    "require": "./index.cjs"
   },
   "scripts": {
     "prepublishOnly": "npm run build && npm test",
@@ -20,8 +19,9 @@
   },
   "files": [
     "index.next.js",
-    "rawth.js",
-    "rawth.min.js"
+    "index.js",
+    "index.cjs",
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "URL",
     "router"
   ],
-  "author": "Gianluca Guarini <gianluca.guarini@gmail.com> (http://gianlucaguarini.com)",
+  "author": "Gianluca Guarini <gianluca.guarini@gmail.com> (https://gianlucaguarini.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GianlucaGuarini/rawth/issues"
@@ -43,18 +43,17 @@
   "homepage": "https://github.com/GianlucaGuarini/rawth#readme",
   "devDependencies": {
     "@gianlucaguarini/eslint-config": "^2.0.0",
-    "c8": "^7.12.0",
-    "chai": "^4.3.7",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "c8": "^8.0.1",
+    "chai": "^4.3.10",
     "coveralls": "^3.1.1",
-    "eslint": "^8.29.0",
-    "mocha": "^10.1.0",
-    "rollup": "^3.6.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "eslint": "^8.50.0",
+    "mocha": "^10.2.0",
+    "rollup": "^3.29.4"
   },
   "dependencies": {
-    "erre": "^2.2.0",
+    "erre": "^3.0.1",
     "path-to-regexp": "^6.2.1"
   }
 }

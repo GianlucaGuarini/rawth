@@ -1,7 +1,7 @@
 import route, {
+  configure,
   defaults,
   match,
-  mergeOptions,
   router,
   toPath,
   toRegexp,
@@ -11,15 +11,20 @@ import erre from 'erre'
 import {expect} from 'chai'
 
 describe('rawth', function() {
-  it('the options can be properly merged', () => {
-    const options = mergeOptions({foo: 'foo', base: 'buz'})
-
-    expect(options.foo).to.be.equal('foo')
-    expect(options.base).to.be.equal('buz')
-  })
-
   it('the default options will be exported', () => {
     expect(defaults).to.be.ok
+  })
+
+  it('the default options can be configured', () => {
+    expect(defaults.base).to.be.equal('https://localhost')
+    configure({
+      base: 'http://localhost'
+    })
+    expect(defaults.base).to.be.equal('http://localhost')
+    configure({
+      base: 'https://localhost'
+    })
+    expect(defaults.base).to.be.equal('https://localhost')
   })
 
   it('the toPath method returns valid string paths', () => {
@@ -34,6 +39,7 @@ describe('rawth', function() {
 
     expect(url.pathname).to.be.equal('/foo/bar')
     expect(url.hostname).to.be.equal('localhost')
+    expect(url.protocol).to.be.equal('https:')
     expect(url.params.foo).to.be.equal('foo')
     expect(url.params.bar).to.be.equal('bar')
   })

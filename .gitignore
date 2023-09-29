@@ -40,5 +40,5 @@ jspm_packages
 .DS_Store
 
 # Ignore output file
-rawth.js
-rawth.min.js
+index.js
+index.cjs

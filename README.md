@@ -69,12 +69,16 @@ usersRouteStream.end()
 
 ### Set the base path
 
-You can set the base path in order to simplify the creation of the subscription functions
+You can set the base path and override the router default options using the `configure` method
 
 ```js
-import { defaults } from 'rawth'
+import { configure } from 'rawth'
 
-defaults.base = 'http://localhost:8000'
+configure({
+  base: 'https://example.com',
+  strict: true
+})
+
 ```
 
 [ci-image]:https://github.com/GianlucaGuarini/rawth/actions/workflows/test.yml/badge.svg

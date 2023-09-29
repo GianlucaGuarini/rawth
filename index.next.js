@@ -13,7 +13,7 @@ const replaceBase = path => path.replace(defaults.base, '')
 
 /**
  * Try to match the current path or skip it
- * @param   {RegEx} pathRegExp - target path transformed by pathToRegexp
+ * @param   {RegExp} pathRegExp - target path transformed by pathToRegexp
  * @returns {string|Symbol} if the path match we return it otherwise we cancel the stream
  */
 const matchOrSkip = pathRegExp => path => match(path, pathRegExp) ? path : erre.cancel()
@@ -39,22 +39,30 @@ const joinStreams = (dispatcherStream, receiverStream) => {
  * @param   {Error} error - error to catch
  * @returns {void}
  */
+/* c8 ignore start */
 const panic = error => {
   if (defaults.silentErrors) return
 
   throw new Error(error)
 }
+/* c8 ignore stop */
 
 // make sure that the router will always receive strings params
-export const filterStrings = str => isString(str) ? str : erre.cancel()
+const filterStrings = str => isString(str) ? str : erre.cancel()
 
 // create the streaming router
 export const router = erre(filterStrings).on.error(panic) // cast the values of this stream always to string
 
+/**
+ * Merge the user options with the defaults
+ * @param   {Object} options - custom user options
+ * @returns {Object} options object merged with defaults
+ */
+const mergeOptions = options => ({...defaults, ...options})
+
 /* @type {object} general configuration object */
 export const defaults = {
-  // custom option
-  base: 'http://localhost',
+  base: 'https://localhost',
   silentErrors: false,
   // pathToRegexp options
   sensitive: false,
@@ -68,11 +76,19 @@ export const defaults = {
 }
 
 /**
- * Merge the user options with the defaults
- * @param   {Object} options - custom user options
- * @returns {Object} options object merged with defaults
+ * Configure the router options overriding the defaults
+ * @param {Object} options - custom user options to override
+ * @returns {Object} new defaults
  */
-export const mergeOptions = options => ({...defaults, ...options})
+export const configure = (options) => {
+  Object.entries(options).forEach(([key, value]) => {
+    if (Object.hasOwn(defaults, key)) defaults[key] = value
+  })
+
+  return defaults
+}
+
+
 
 /* {@link https://github.com/pillarjs/path-to-regexp#usage} */
 export const toRegexp = (path, keys, options) => pathToRegexp(path, keys, mergeOptions(options))

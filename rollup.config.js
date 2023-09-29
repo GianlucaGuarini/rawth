@@ -1,28 +1,22 @@
-import commonjs from 'rollup-plugin-commonjs'
-import resolve from 'rollup-plugin-node-resolve'
-import {terser} from 'rollup-plugin-terser'
+import commonjs from '@rollup/plugin-commonjs'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default {
   input: 'index.next.js',
   plugins: [
     commonjs(),
-    resolve({
-      jsnext: true
-    })
+    nodeResolve()
   ],
   output: [
     {
       name: 'rawth',
-      file: 'rawth.js',
+      file: 'index.cjs',
       format: 'umd'
     },
     {
       name: 'rawth',
-      file: 'rawth.min.js',
-      format: 'umd',
-      plugins: [
-        terser()
-      ]
+      file: 'index.js',
+      format: 'es'
     }
   ]
 }
