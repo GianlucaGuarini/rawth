@@ -87,7 +87,7 @@ configure({
 [license-image]:http://img.shields.io/badge/license-MIT-000000.svg?style=flat-square
 [license-url]:LICENSE
 
-[lib-size]:https://img.badgesize.io/https://unpkg.com/rawth/rawth.min.js?compression=gzip
+[lib-size]:https://img.badgesize.io/https://unpkg.com/rawth/index.js?compression=gzip
 
 [npm-version-image]:http://img.shields.io/npm/v/rawth.svg?style=flat-square
 [npm-downloads-image]:http://img.shields.io/npm/dm/rawth.svg?style=flat-square
