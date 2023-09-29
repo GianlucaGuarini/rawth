@@ -94,7 +94,7 @@ configure({
 [npm-url]:https://npmjs.org/package/rawth
 
 [coverage-image]:https://img.shields.io/coveralls/GianlucaGuarini/rawth/maser.svg?style=flat-square
-[coverage-url]:https://coveralls.io/r/GianlucaGuarini/rawth?branch=dev
+[coverage-url]:https://coveralls.io/r/GianlucaGuarini/rawth?branch=main
 
 [codeclimate-image]:https://api.codeclimate.com/v1/badges/5a4b8cf4736254115cb3/maintainability
 [codeclimate-url]:https://codeclimate.com/github/GianlucaGuarini/rawth/maintainability
