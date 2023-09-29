@@ -1,6 +1,6 @@
 {
   "name": "rawth",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Pure functional isomorphic router based on streams",
   "main": "index.js",
   "types": "index.d.ts",
