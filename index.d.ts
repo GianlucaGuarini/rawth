@@ -1,5 +1,5 @@
 import { ErreStream } from 'erre'
-import { TokensToRegexpOptions, ParseOptions, pathToRegexp, compile } from 'path-to-regexp'
+import { TokensToRegexpOptions, ParseOptions, pathToRegexp } from 'path-to-regexp'
 
 type Callback = (...args: any[]) => any
 
